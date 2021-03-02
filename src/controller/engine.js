@@ -1,47 +1,37 @@
-import activites from "./activities";
+import getActivities from "./activities";
+import Storage, { Keys } from "./storage";
 import { getWeight } from "./GoogleFit";
 import moment from "moment";
 
 const getRecommendations = async() => {
   const weight = await getWeight();
-  var time = moment().get('hour');
-  console.log("TIME: "+ time);
-  var gymAccess = false;
-  var desiredIntensity = 3;
-  const recommendations = activites.map((x,index) => {
-      x.id = index.toString();
-      x.calories = Math.round(x.calories * weight);
-      x.score = x.calories;
-      if(time < x.time)
-      {
-        x.score += 200;
-        if(gymAccess && x.gym)
-        {
-            score += 300;
+  const time = moment().get('hour');
+  const gymAccess = Storage.getBoolean(Keys.gym);
+  const desiredIntensity = Storage.getNumber(Keys.activity) || 2;
+  const recommendations = getActivities().map((activity, index) => {
+      activity.id = index.toString();
+      activity.calories = Math.round(activity.calories * weight);
+      activity.score = 0 + activity.calories;
+      if (time < activity.time) {
+        activity.score += 200;
+        if (gymAccess && activity.gym) {
+          activity.score += 300;
         }
+      } else {
+        activity.score -=100;
       }
-      else
-      {
-        x.score -=100;
+      if (!gymAccess && activity.gym) {
+        activity.score -= 300;
       }
-
-      if(!gymAccess && x.gym)
-      {
-        x.score -= 300;
+      activity.score += 250;
+      if (activity.intensity != desiredIntensity) {
+        const diff = activity.intensity - desiredIntensity;
+        activity.score -= Math.abs(diff) * (diff > 0 ? 100 : 50);
       }
-
-      if(desiredIntensity == x.intensity)
-      {
-        x.score += 250;
-      }
-      else
-      {
-        x.score -= Math.abs(x.intensity - desiredIntensity)*50;
-      }
-      console.log(x.score);
-      return x;
+      console.log(`${activity.name}: ${activity.score}`);
+      return activity;
     });
-    recommendations.sort((a, b) => b.score - a.score);
+    recommendations.sort((a, b) => a.score < b.score);
   return recommendations;
 }
 

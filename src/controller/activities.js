@@ -1,6 +1,8 @@
+import * as _ from "lodash";
+
 const activityCalories = (lb125, lb155, lb185) => (lb125 + lb155 + lb185)/(125+155+185);
 
-const activites = [
+const activities = [
   {
     name: 'Walking',
     calories: activityCalories(120, 149, 178),
@@ -66,4 +68,6 @@ const activites = [
   }
 ];
 
-export default activites;
+const getActivities = () => _.cloneDeep(activities);
+
+export default getActivities;
