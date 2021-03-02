@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Goals from "./components/Goals";
+import Login from "./components/Login";
 import Home from "./components/Home";
 import Settings from "./components/Settings";
 import { isAuthorized, authorize } from "./controller/GoogleFit";
@@ -24,7 +24,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Goals" component={Goals} />
+        <Tab.Screen name="Login" component={Login}/>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Settings" component={Settings} />
       </Tab.Navigator>
