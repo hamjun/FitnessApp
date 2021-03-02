@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { 
     StyleSheet,
     View, 
@@ -7,12 +7,43 @@ import {
     ImageBackground,
     Text
 } from "react-native";
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
 //make a username and password input lines
 
-const Login = () => {
-    const [login, text1] = React.useState('');
-    const [pass, text2] = React.useState('');
+const Login = ({navigation}) => {
+    const [login, text1] = useState('');
+    const [pass, text2] = useState('');
+    
+    useEffect(() => {
+      GoogleSignin.configure({
+        scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+        webClientId: '586484441686-am38m0i557i25c9ape9higk236ddogqm.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+        offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+        forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+        //accountName: '', // [Android] specifies an account name on the device that should be used
+      });
+    }, [])
+    
+    const signIn = async () => {
+      try {
+        await GoogleSignin.hasPlayServices();
+        const userInfo = await GoogleSignin.signIn();
+        //this.setState({ userInfo });
+        console.log({userInfo})
+      } catch (error) {
+        console.log({error})
+        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+          // user cancelled the login flow
+        } else if (error.code === statusCodes.IN_PROGRESS) {
+          // operation (e.g. sign in) is in progress already
+        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          // play services not available or outdated
+        } else {
+          // some other error happened
+        }
+      }
+    };
 
     return (
       <View style={styles.container}>
@@ -36,14 +67,14 @@ const Login = () => {
         <View style = {styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('Goal')}>
+            onPress={()=>navigation.navigate('Settings')}>
             <Text style={{fontSize: 20, color: 'white'}}> Login </Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          <GoogleSigninButton
             style={styles.button}
-            onPress={() => navigation.navigate('Goal')}>
-            <Text style={{fontSize: 20, color: 'white'}}> Google? </Text>
-          </TouchableOpacity>
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={signIn}/>
         </View>
       </View>
     )
@@ -98,7 +129,8 @@ const Login = () => {
       backgroundColor: '#1673B6',
       padding: 10,
       borderRadius: 10,
-      width: 100,
+      height: 55,
+      width: 150,
     },
   });
   export default Login;
