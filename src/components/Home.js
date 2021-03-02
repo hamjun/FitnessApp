@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
 import Meal from './Meal';
 import Recommendation from './Recommendation';
 import getRecommendations from '../controller/engine';
+import Storage, { Keys } from "../controller/storage";
+import { authorize } from "../controller/GoogleFit";
 
 const Home = () => {
   const [results, setResults] = useState([]);
 
-  if (results.length === 0) {
-    console.log(results);
-    getRecommendations()
-      .then((recommendations) => {
-        console.log(recommendations);
-        setResults(recommendations)
-      });
-  }
+  useEffect(() => {
+    if (Storage.getBoolean(Keys.setup)) {
+      authorize()
+        .then(getRecommendations)
+        .then((recommendations) => {
+          console.log(recommendations);
+          setResults(recommendations);
+        })
+        .catch(console.error);
+    }
+  }, []);
 
   return (
     <View>

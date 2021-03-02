@@ -1,33 +1,39 @@
-import React, { useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import React from "react";
+import { Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Login from "./components/Login";
+import { createStackNavigator } from "@react-navigation/stack";
 import Home from "./components/Home";
+import Setup from "./components/Setup";
 import Settings from "./components/Settings";
-import { isAuthorized, authorize } from "./controller/GoogleFit";
+import Storage, { Keys } from "./controller/storage";
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
-export default function App() {
-  const [auth, setAuth] = useState(false);
-  if (!auth && !isAuthorized()) {
-    authorize()
-      .then(setAuth(true))
-      .catch(console.error);
-    return (
-      <View>
-        <ActivityIndicator size="large"/>
-      </View>
-    )
-  }
+const App = () => {
+
+  const initialRoute = Storage.getBoolean(Keys.setup) ? "Home" : "Setup";
+
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Login" component={Login}/>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Settings" component={Settings} />
-      </Tab.Navigator>
+      <Stack.Navigator initialRouteName={initialRoute}>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={({ navigation }) => ({
+            title: "Home",
+            headerRight: () => (
+              <Button
+                title="Settings"
+                onPress={() => navigation.navigate("Settings")}
+              />
+            ),
+          })}
+        />
+        <Stack.Screen name="Settings" component={Settings} options={{title: "Settings"}} />
+        <Stack.Screen name="Setup" component={Setup} options={{title: "Setup"}} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+export default App;
