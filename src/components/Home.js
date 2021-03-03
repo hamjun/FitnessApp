@@ -1,35 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { FlatList, View } from "react-native";
+import React from "react";
+import { View } from "react-native";
+import { Button } from "react-native-elements";
 import Food from './Food';
 import Sleep from './Sleep';
 import BMR from './BMR';
-import Recommendation from './Recommendation';
-import getRecommendations from '../controller/engine';
-import Storage, { Keys } from "../controller/storage";
+import styles from "../styles/styles";
 
-const Home = () => {
-  const [results, setResults] = useState([]);
-
-  useEffect(() => {
-    if (Storage.getBoolean(Keys.setup)) {
-      getRecommendations()
-        .then((recommendations) => {
-          console.log(recommendations);
-          setResults(recommendations);
-        })
-        .catch(console.error);
-    }
-  }, []);
+const Home = ({ navigation }) => {
 
   return (
     <View>
       <Food />
       <Sleep />
       <BMR />
-      <FlatList
-        numColumns={1}
-        data={results}
-        renderItem={({ item }) => <Recommendation data={item}/>}
+      <Button
+        buttonStyle={styles.getExercisesButton}
+        title="Get Recommended Exercises"
+        onPress={() => navigation.navigate("Exercises")}
       />
     </View>
   )
