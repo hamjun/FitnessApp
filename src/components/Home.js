@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
-import Meal from './Meal';
+import Food from './Food';
+import Sleep from './Sleep';
 import Recommendation from './Recommendation';
 import getRecommendations from '../controller/engine';
 import Storage, { Keys } from "../controller/storage";
@@ -23,7 +24,8 @@ const Home = () => {
 
   return (
     <View>
-      <Meal/>
+      <Food />
+      <Sleep />
       <FlatList
         numColumns={1}
         data={results}

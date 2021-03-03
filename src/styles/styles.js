@@ -19,7 +19,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 100
   },
-
+  getExercisesButton: {
+    backgroundColor: 'green',
+    maxWidth: '75%',
+    marginTop: 15,
+    marginHorizontal: '21%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardText: {
+    textAlign: 'center',
+  }
 });
 
 export default styles;
