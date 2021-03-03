@@ -11,6 +11,8 @@ const Storage = {
 
 export const Keys = {
   activity: "activity",
+  age: "age",
+  gender: "gender",
   gym: "gym",
   setup: "setup",
 };

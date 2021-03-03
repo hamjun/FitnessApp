@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { FlatList, View } from "react-native";
 import Food from './Food';
 import Sleep from './Sleep';
+import BMR from './BMR';
 import Recommendation from './Recommendation';
 import getRecommendations from '../controller/engine';
 import Storage, { Keys } from "../controller/storage";
-import { authorize } from "../controller/GoogleFit";
 
 const Home = () => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
     if (Storage.getBoolean(Keys.setup)) {
-      authorize()
-        .then(getRecommendations)
+      getRecommendations()
         .then((recommendations) => {
           console.log(recommendations);
           setResults(recommendations);
@@ -26,6 +25,7 @@ const Home = () => {
     <View>
       <Food />
       <Sleep />
+      <BMR />
       <FlatList
         numColumns={1}
         data={results}

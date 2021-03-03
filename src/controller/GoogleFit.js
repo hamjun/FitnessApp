@@ -14,7 +14,22 @@ export const authorize = async() => {
   return GoogleFit.authorize(options);
 }
 
+export const getHeight = async() => {
+  try {
+    await authorize();
+    const response = await GoogleFit.getHeightSamples({
+      startDate: moment().subtract(1, "month").toISOString(),
+      endDate: moment().toISOString(),
+    });
+    console.log(response);
+    return response.length ? response[0].value : 0;
+  } catch (error) {
+    return 0;
+  }
+}
+
 export const getWeight = async() => {
+  await authorize();
   const response = await GoogleFit.getWeightSamples({
     unit: "pound",
     startDate: moment().subtract(1, "month").toISOString(),
@@ -25,6 +40,7 @@ export const getWeight = async() => {
 
 export const getWater = async() => {
   try {
+    await authorize();
     const response = await GoogleFit.getHydrationSamples({
       startDate: moment().hours(0).toISOString(),
       endDate: moment().toISOString(),
