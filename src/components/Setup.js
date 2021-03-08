@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, StyleSheet, View } from "react-native";
 import { StackActions } from '@react-navigation/native';
+import * as Location from "expo-location";
 import Settings from "./Settings";
 import { isAuthorized, authorize } from "../controller/GoogleFit";
 import Storage, { Keys } from "../controller/storage";
@@ -12,8 +13,9 @@ const Setup = ({ navigation }) => {
       .catch(console.error);
   }
 
-  const submit = () => {
+  const submit = async() => {
     if (isAuthorized()) {
+      await Location.requestPermissionsAsync();
       Storage.set(Keys.setup, true);
       navigation.dispatch(StackActions.replace("Home"));
     }

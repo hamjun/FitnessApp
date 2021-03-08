@@ -8,21 +8,24 @@ const activities = [
     calories: activityCalories(120, 149, 178),
     gym: false,
     intensity: 1,
-    time: 17
+    time: 17,
+    outside: true
   },
   {
     name: 'Running',
     calories: activityCalories(240, 298, 355),
     gym: false,
     intensity: 2,
-    time: 16
+    time: 16,
+    outside: true
   },
   {
     name: 'Bicycling',
     calories: activityCalories(240, 298, 355),
     gym: false,
     intensity: 2,
-    time: 15
+    time: 15,
+    outside: true
   },
   {
     name: 'Yoga',
