@@ -1,4 +1,4 @@
-import * as _ from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
 const activityCalories = (lb125, lb155, lb185) => (lb125 + lb155 + lb185)/(125+155+185);
 
@@ -68,9 +68,49 @@ const activities = [
     gym: true,
     intensity: 1,
     time: 12
-  }
+  },
+  {
+    name: 'Basketball',
+    calories: activityCalories(240, 298, 355),
+    gym: true,
+    outside: true,
+    intensity: 3,
+    time: 16
+  },
+  {
+    name: 'Aerobics',
+    calories: activityCalories(210, 260, 311),
+    gym: false,
+    outside: false,
+    intensity: 2,
+    time: 18
+  },
+  {
+    name: 'Eliptical',
+    calories: activityCalories(270, 335, 400),
+    gym: true,
+    outside: false,
+    intensity: 3,
+    time: 12
+  },
+  {
+    name: 'Rock Climbing',
+    calories: activityCalories(240, 298, 355),
+    gym: true,
+    outside: false,
+    intensity: 3,
+    time: 18
+  },
+  {
+    name: 'Jogging',
+    calories: activityCalories(180, 223, 266),
+    gym: false,
+    outside: true,
+    intensity: 2,
+    time: 17
+  },
 ];
 
-const getActivities = () => _.cloneDeep(activities);
+const getActivities = () => cloneDeep(activities);
 
 export default getActivities;
